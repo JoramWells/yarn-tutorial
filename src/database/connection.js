@@ -8,3 +8,4 @@ const sequelize = new Sequelize('socialnetwork', 'root','',
                     })
 
 module.exports = sequelize
+global.sequelize = sequelize

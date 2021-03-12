@@ -18,6 +18,9 @@ app.use(router)
 const routePath = path.resolve('./dist')
 app.use(express.static(routePath))
 
+//DB Connection
+require('./SRC/database/connection')
+
 
 router.use((err, req, res, next) =>{
     if(err){
