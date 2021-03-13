@@ -1,34 +1,23 @@
 const express = require('express')
 const path = require('path')
-const router = express.Router()
-const bodyParser = require('body-parser')
+const db = require('./config/database')
 
 const app = express()
 
-app.set('view engine', 'pug')
-app.set('views', path.resolve('./src/views'))
-
-//Body parsing
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended:true}))
-
-//create express router
-app.use(router)
-
-const routePath = path.resolve('./dist')
-app.use(express.static(routePath))
-
-//DB Connection
-require('./SRC/database/connection')
 
 
-router.use((err, req, res, next) =>{
-    if(err){
-        return res.send(err.message)
-    }
+db.authenticate()
+.then(()=>console.log('Connected succesfully...'))
+.catch(err=>console.log(err))
+
+app.get('/', (req,res) =>{
+    res.sendStatus(204)
 })
 
+//blog routes
+app.use('/blog', require('./routes/blogs'))
 
-app.listen(3000, ()=>{
-    console.log('App running on http://localhost:3000')
+const PORT = process.env.PORT || 5000
+app.listen(PORT, ()=>{
+    console.log(`App running on http://localhost:${PORT}`)
 })
